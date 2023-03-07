@@ -3,8 +3,10 @@ from typing import Optional, Dict, Tuple
 
 from tqdm import tqdm
 
-from datasets import load_dataset, Dataset
+from datasets import load_dataset, Dataset, DatasetDict
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+import pandas as pd 
 
 
 def prep_dataset(
@@ -41,8 +43,14 @@ def prep_dataset(
         datasets = load_imdb()
     elif config_name == "yelp":
         datasets = load_yelp()
+    # ===== Datasets for the OOD project =====
     elif config_name == "b77":
         datasets = load_b77()
+    elif config_name == "atis": 
+        datasets = load_atis()
+    elif config_name == "bitex": 
+        datasets = load_bitext()
+    # =========================================
     elif config_name == "massive":
         datasets = load_massive()
     elif config_name == "emotion":
@@ -306,24 +314,25 @@ def load_emotion():
 
 def load_b77():
     datasets = load_dataset("banking77")  # label = json
-    datasets = {
-        "train": datasets["train"],
-        "validation": datasets["test"],
-        "test": datasets["test"],
-    }
-    new_datasets = {"train": [], "validation": [], "test": []}
-    for split_name in new_datasets.keys():
-        arr = datasets[split_name]["label"]
-        texts = datasets[split_name]["text"]
+    return datasets
 
-        for i in tqdm(range(len(arr))):
-            new_datasets[split_name].append(
-                {
-                    "label": arr[i],
-                    "text": texts[i],
-                }
-            )
-    return new_datasets
+def load_atis():
+    """Description. ATIS Airline Travel Information System."""
+    dataset = pd.read_csv("../../datasets/atis.csv", names=["text", "label"])
+    dataset = DatasetDict({"test": Dataset.from_pandas(dataset)})
+
+    return dataset
+
+def load_bitext(): 
+    """Description. Bitext - Customer Service Tagged Training Dataset for Intent Detection"""
+    dataset = pd.read_csv("../../datasets/bitext.csv")
+    dataset = dataset\
+        .rename(columns={"utterance": "text", "intent": "label"})\
+        .loc[:, ["text", "label"]]
+
+    dataset = DatasetDict({"test": Dataset.from_pandas(dataset)})
+
+    return dataset
 
 
 def load_twitterfin():

@@ -4,10 +4,8 @@ from typing import List, Dict, Any, Optional, Callable
 import torch
 from datasets import load_dataset, DatasetDict
 from torch.utils.data import DataLoader
-import evaluate
 
 from Todd import ScorerType
-
 
 def prepare_detectors(
         detectors: List[ScorerType], model, loader: DataLoader, tokenizer

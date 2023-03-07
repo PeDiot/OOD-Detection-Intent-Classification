@@ -20,7 +20,11 @@ EN_CONFIGS = {
     "mnli": {"label": 3, "metric": "mnli", "keys": ("premise", "hypothesis")},
     "snli": {"label": 3, "metric": "mnli", "keys": ("premise", "hypothesis")},
     "rte": {"label": 2, "metric": "mnli", "keys": ("sentence1", "sentence2")},
+    # ==================== Config for OOD project ====================
     "b77": {"label": 77, "metric": "mnli", "keys": ("text", None)},
+    "atis": {"label": 22, "metric": "mnli", "keys": ("text", None)},
+    "bitext": {"label": 27, "metric": "mnli", "keys": ("text", None)},
+    # =================================================================
     "massive": {"label": 60, "metric": "mnli", "keys": ("text", None)},
     "trec_fine": {"label": 50, "metric": "mnli", "keys": ("text_scr", None)},
     "emotion": {"label": 6, "metric": "mnli", "keys": ("text", None)},
