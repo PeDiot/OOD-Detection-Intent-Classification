@@ -114,9 +114,12 @@ def prep_dataset(
         list(map(preprocess_function, datasets["test"])) if "test" in datasets else None
     )
 
-    train_dataset = Dataset.from_list(train_dataset[:train_max_size])
-    dev_dataset = Dataset.from_list(dev_dataset[:validation_max_size])
-    test_dataset = Dataset.from_list(test_dataset[:test_max_size])
+    if train_max_size > 0: 
+        train_dataset = Dataset.from_list(train_dataset[:train_max_size])
+    if validation_max_size > 0: 
+        dev_dataset = Dataset.from_list(dev_dataset[:validation_max_size])
+    if test_max_size > 0: 
+        test_dataset = Dataset.from_list(test_dataset[:test_max_size])
 
     return train_dataset, dev_dataset, test_dataset
 
@@ -313,7 +316,88 @@ def load_emotion():
 
 
 def load_b77():
-    datasets = load_dataset("banking77")  # label = json
+    label_mapping = {
+        'Refund_not_showing_up': 0,
+        'activate_my_card': 1,
+        'age_limit': 2,
+        'apple_pay_or_google_pay': 3,
+        'atm_support': 4,
+        'automatic_top_up': 5,
+        'balance_not_updated_after_bank_transfer': 6,
+        'balance_not_updated_after_cheque_or_cash_deposit': 7,
+        'beneficiary_not_allowed': 8,
+        'cancel_transfer': 9,
+        'card_about_to_expire': 10,
+        'card_acceptance': 11,
+        'card_arrival': 12,
+        'card_delivery_estimate': 13,
+        'card_linking': 14,
+        'card_not_working': 15,
+        'card_payment_fee_charged': 16,
+        'card_payment_not_recognised': 17,
+        'card_payment_wrong_exchange_rate': 18,
+        'card_swallowed': 19,
+        'cash_withdrawal_charge': 20,
+        'cash_withdrawal_not_recognised': 21,
+        'change_pin': 22,
+        'compromised_card': 23,
+        'contactless_not_working': 24,
+        'country_support': 25,
+        'declined_card_payment': 26,
+        'declined_cash_withdrawal': 27,
+        'declined_transfer': 28,
+        'direct_debit_payment_not_recognised': 29,
+        'disposable_card_limits': 30,
+        'edit_personal_details': 31,
+        'exchange_charge': 32,
+        'exchange_rate': 33,
+        'exchange_via_app': 34,
+        'extra_charge_on_statement': 35,
+        'failed_transfer': 36,
+        'fiat_currency_support': 37,
+        'get_disposable_virtual_card': 38,
+        'get_physical_card': 39,
+        'getting_spare_card': 40,
+        'getting_virtual_card': 41,
+        'lost_or_stolen_card': 42,
+        'lost_or_stolen_phone': 43,
+        'order_physical_card': 44,
+        'passcode_forgotten': 45,
+        'pending_card_payment': 46,
+        'pending_cash_withdrawal': 47,
+        'pending_top_up': 48,
+        'pending_transfer': 49,
+        'pin_blocked': 50,
+        'receiving_money': 51,
+        'request_refund': 52,
+        'reverted_card_payment?': 53,
+        'supported_cards_and_currencies': 54,
+        'terminate_account': 55,
+        'top_up_by_bank_transfer_charge': 56,
+        'top_up_by_card_charge': 57,
+        'top_up_by_cash_or_cheque': 58,
+        'top_up_failed': 59,
+        'top_up_limits': 60,
+        'top_up_reverted': 61,
+        'topping_up_by_card': 62,
+        'transaction_charged_twice': 63,
+        'transfer_fee_charged': 64,
+        'transfer_into_account': 65,
+        'transfer_not_received_by_recipient': 66,
+        'transfer_timing': 67,
+        'unable_to_verify_identity': 68,
+        'verify_my_identity': 69,
+        'verify_source_of_funds': 70,
+        'verify_top_up': 71,
+        'virtual_card_not_working': 72,
+        'visa_or_mastercard': 73,
+        'why_verify_identity': 74,
+        'wrong_amount_of_cash_received': 75,
+        'wrong_exchange_rate_for_cash_withdrawal': 76
+    }
+    datasets = load_dataset("banking77")  
+    datasets = datasets.align_labels_with_mapping(label_mapping, "label")
+    
     return datasets
 
 def load_atis():
