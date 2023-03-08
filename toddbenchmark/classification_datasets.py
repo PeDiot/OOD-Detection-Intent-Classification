@@ -8,6 +8,11 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 import pandas as pd 
 
+# important to keep the full path
+# choose your own path 
+# used to load ATIS and BITEXT datasets
+DATASETS = "C:/Users/pemma/OneDrive - GENES/Ensae/S2/NLP/Project/ToddBenchmark/datasets/"
+
 
 def prep_dataset(
     config_name,
@@ -48,7 +53,7 @@ def prep_dataset(
         datasets = load_b77()
     elif config_name == "atis": 
         datasets = load_atis()
-    elif config_name == "bitex": 
+    elif config_name == "bitext": 
         datasets = load_bitext()
     # =========================================
     elif config_name == "massive":
@@ -402,14 +407,14 @@ def load_b77():
 
 def load_atis():
     """Description. ATIS Airline Travel Information System."""
-    dataset = pd.read_csv("../../datasets/atis.csv", names=["text", "label"])
+    dataset = pd.read_csv(f"{DATASETS}atis.csv")
     dataset = DatasetDict({"test": Dataset.from_pandas(dataset)})
 
     return dataset
 
 def load_bitext(): 
     """Description. Bitext - Customer Service Tagged Training Dataset for Intent Detection"""
-    dataset = pd.read_csv("../../datasets/bitext.csv")
+    dataset = pd.read_csv(f"{DATASETS}/bitext.csv")
     dataset = dataset\
         .rename(columns={"utterance": "text", "intent": "label"})\
         .loc[:, ["text", "label"]]
