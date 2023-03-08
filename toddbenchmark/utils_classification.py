@@ -1,9 +1,12 @@
 from collections import defaultdict
 from typing import List, Dict, Any, Optional, Callable
 
+from tqdm import tqdm
+
 import torch
 from datasets import load_dataset, DatasetDict
 from torch.utils.data import DataLoader
+from torch import Tensor
 
 from Todd import ScorerType
 
@@ -18,7 +21,10 @@ def prepare_detectors(
     :return: List of fitted detectors
     """
 
-    for batch in loader:
+    loop = tqdm(loader) 
+    loop.set_description("Collecting hidden states...")
+
+    for batch in loop:
 
         inputs = tokenizer(
             batch["text"], padding=True, truncation=True, return_tensors="pt"
@@ -33,7 +39,10 @@ def prepare_detectors(
         for detector in detectors:
             detector.accumulate(output)
 
-    for detector in detectors:
+    loop = tqdm(detectors)
+    loop.set_description("Fitting detectors...")
+
+    for detector in loop:
         detector.fit()
 
     return detectors
@@ -80,7 +89,10 @@ def evaluate_dataloader(
     records["true_label"] = []
     records["correct"] = []
 
-    for batch_idx, batch in enumerate(data_loader):
+    loop = tqdm(data_loader)
+    loop.set_description("Evaluating detectors...")
+
+    for batch_idx, batch in enumerate(loop):
 
         inputs = tokenizer(
             batch["text"], padding=True, truncation=True, return_tensors="pt"
@@ -110,8 +122,16 @@ def evaluate_dataloader(
 
         pred_labels = torch.argmax(likelihood, dim=-1)
 
-        records["pred_label"].extend(pred_labels.tolist())
-        records["true_label"].extend(labels.tolist())
-        records["correct"].extend((pred_labels == labels).tolist())
+
+        if isinstance(pred_labels, Tensor) and isinstance(labels, Tensor):
+            correct = (pred_labels == labels).tolist()
+            labels = labels.tolist()
+            pred_labels = pred_labels.tolist()
+        else: 
+            correct = [i==j for i, j in zip(pred_labels, labels)]            
+
+        records["pred_label"].extend(pred_labels)
+        records["true_label"].extend(labels)
+        records["correct"].extend(correct)
 
     return records
