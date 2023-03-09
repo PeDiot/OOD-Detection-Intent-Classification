@@ -71,11 +71,30 @@ def evaluate_batch(output, detectors: List[ScorerType]) -> Dict[str, torch.Tenso
 
     return scores
 
+def energy(logits: Tensor, temperature: float) -> Tensor: 
+    """Description. Energy function for multi-class classification."""
+
+    logits = logits.detach()
+    score = torch.sum(torch.exp(logits / temperature), dim=-1) 
+    score = -temperature * torch.log(score)
+
+    return score
+
+def msp(likelihood: Tensor) -> Tensor: 
+    """Description. Maximum softmax probability score."""
+
+    likelihood = likelihood.detach()
+    likelihood_max = likelihood.max(dim=-1).values
+    score = torch.exp(likelihood_max)
+
+    return score
+
 def evaluate_dataloader(
         model,
         data_loader: DataLoader,
         tokenizer,
         detectors: List[ScorerType],
+        energy_temperature: float=1.
 ) -> Dict[str, List]:
     # Initialize the scores dictionary
     records: Dict[str, List] = {
@@ -84,7 +103,8 @@ def evaluate_dataloader(
         for score_name in detector.score_names
     }
 
-    records["likelihood"] = []
+    records["msp"] = []
+    records["energy"] = []
     records["pred_label"] = []
     records["true_label"] = []
     records["correct"] = []
@@ -118,10 +138,16 @@ def evaluate_dataloader(
             records[k].extend(scores)
 
         logits = output.logits
+        energy_scores = energy(logits, energy_temperature)
+
+        # log-softmax is advantageous over softmax for improved numerical performance and gradient optimization
         likelihood = torch.nn.functional.log_softmax(logits, dim=-1)
+        msp_scores = msp(likelihood)
+
+        records["msp"].extend([s.item() for s in msp_scores])
+        records["energy"].extend([s.item() for s in energy_scores])
 
         pred_labels = torch.argmax(likelihood, dim=-1)
-
 
         if isinstance(pred_labels, Tensor) and isinstance(labels, Tensor):
             correct = (pred_labels == labels).tolist()
