@@ -1,49 +1,11 @@
+# OOD Detection for Intent Classification 
 
-# Benchmark scripts for Text OOD detection 
+Based on the [Todd](https://github.com/icannos/Todd) library and [ToddBenchmark](https://github.com/icannos/ToddBenchmark) framework implemented by [[1]](#1).
 
-This is the sister repository of [https://github.com/icannos/Todd/](https://github.com/icannos/Todd/). 
-This repository contains the scripts and dataset loading for the Todd benchmark. It provides easy access to a range
-of datasets and models on which to run Todd detectors.
+## References
 
-## Cite this work
-
-[![DOI](https://zenodo.org/badge/560093708.svg)](https://zenodo.org/badge/latestdoi/560093708)
-
-If you use this work, please cite us using:
-
-```
-@software{Darrin_Todd_A_tool_2023,
-author = {Darrin, Maxime and Faysse, Manuel and Staerman, Guillaume and Picot, Marine and Dadalto Camara Gomez, Eduardo and Colombo, Pierre},
-month = {2},
-title = {{Todd: A tool for text OOD detection.}},
-url = {https://github.com/icannos/Todd},
-version = {0.0.1},
-year = {2023}
-}
-```
-
-## Installation
-
-To install the package, run the following command:
-
-```bash
-git clone git@github.com:icannos/ToddBenchmark.git
-cd ToddBenchmark
-pip install -e .
-```
-
-## Examples:
-
-Usecases are provided in the `examples` folder.
-
-## Available datasets
-
-Please see `toddbenchmark/classification_datasets_config.py` and
-`toddbenchmark/generation_datasets_configs.py` for the list of available datasets and configuration.
-
-## How to add a new dataset
-
-To add a new dataset you'll need 
-- To add corresponding configs in `toddbenchmark/(*)_datasets_config.py` and
-- To add a load function in `toddbenchmark/(*)_datasets.py`
-- To add the loading condition in the corresponding "load_requested_dataset" / "prep_dataset" function in `toddbenchmark/(*)_datasets.py`
+<a id="1">[1]</a> 
+Darrin, Maxime, Manuel Faysse, Guillaume Staerman, Marine Picot, Eduardo
+Dadalto Camara Gomez, and Pierre Colombo. 2023. <em><span
+class="nocase">Todd: A tool for text OOD detection.</span></em> (version
+0.0.1).
