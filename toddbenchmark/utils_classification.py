@@ -76,7 +76,7 @@ def energy(logits: Tensor, temperature: float) -> Tensor:
 
     logits = logits.detach()
     score = torch.sum(torch.exp(logits / temperature), dim=-1) 
-    score = -temperature * torch.log(score)
+    score = temperature * torch.log(score)
 
     return score
 
@@ -85,7 +85,7 @@ def msp(likelihood: Tensor) -> Tensor:
 
     likelihood = likelihood.detach()
     likelihood_max = likelihood.max(dim=-1).values
-    score = torch.exp(likelihood_max)
+    score = 1 - torch.exp(likelihood_max)
 
     return score
 
