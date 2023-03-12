@@ -11,8 +11,7 @@ import pandas as pd
 # important to keep the full path
 # choose your own path 
 # used to load ATIS and BITEXT datasets
-DATASETS = "C:/Users/pemma/OneDrive - GENES/Ensae/S2/NLP/Project/ToddBenchmark/datasets/"
-
+DATASETS = "C:/Users/pemma/OneDrive - GENES/Ensae/S2/NLP/Project/OOD-Detection-Intent-Classification/datasets/"
 
 def prep_dataset(
     config_name,
@@ -21,6 +20,7 @@ def prep_dataset(
     train_max_size=-1,
     validation_max_size=-1,
     test_max_size=-1,
+    ood_label: Optional[int]=None
 ) -> Tuple[Dataset, Dataset, Dataset]:
     sentence1_key, sentence2_key = config["keys"]
 
@@ -102,6 +102,9 @@ def prep_dataset(
         result["text"] = inputs
 
         result["labels"] = examples["label"] if "label" in examples else 0
+
+        if ood_label != None: 
+            result["ood"] = ood_label
 
         return result
 
