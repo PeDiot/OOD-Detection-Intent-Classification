@@ -3,6 +3,8 @@ from torch.utils.data import DataLoader
 from .classification_datasets import prep_dataset
 import torch
 
+from typing import Optional
+
 BASE_CONFIG = {"batch_size": 16}
 
 EN_CONFIGS = {
@@ -64,6 +66,7 @@ def load_requested_dataset(
     train_size: int = 3000,
     validation_size: int = 3000,
     test_size: int = 3000,
+    ood_label: Optional[int]=None
 ):
     def tokenize_function(examples):
         return tokenizer(text=examples["text"], truncation=True)
@@ -99,6 +102,7 @@ def load_requested_dataset(
         train_max_size=train_size,
         validation_max_size=validation_size,
         test_max_size=test_size,
+        ood_label=ood_label
     )
 
     train_loader = DataLoader(
