@@ -76,7 +76,7 @@ def energy(logits: Tensor, temperature: float) -> Tensor:
 
     logits = logits.detach()
     score = torch.sum(torch.exp(logits / temperature), dim=-1) 
-    score = temperature * torch.log(score)
+    score = - temperature * torch.log(score)
 
     return score
 
