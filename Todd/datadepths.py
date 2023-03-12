@@ -107,7 +107,7 @@ class DataDepth:
                 Y_test = X_test
 
         else:
-            Y_test = X_test.copy()
+            Y_test = X_test.clone()
             Y = X.copy()
 
         # Simulate random directions on the unit sphere.
