@@ -109,7 +109,7 @@ def evaluate_dataloader(
     records["true_label"] = []
     records["correct"] = []
 
-    loop = tqdm(data_loader)
+    loop = tqdm(data_loader, position=0, leave=True)
     loop.set_description("Evaluating detectors...")
 
     for batch_idx, batch in enumerate(loop):
