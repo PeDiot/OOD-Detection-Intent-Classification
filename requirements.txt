@@ -9,3 +9,4 @@ sacremoses
 pandas
 numpy
 mauve-text
+rich 
