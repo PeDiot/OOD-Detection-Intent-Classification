@@ -21,7 +21,7 @@ def prepare_detectors(
     :return: List of fitted detectors
     """
 
-    loop = tqdm(loader) 
+    loop = tqdm(loader, position=0, leave=True)
     loop.set_description("Collecting hidden states...")
 
     for batch in loop:
@@ -39,7 +39,7 @@ def prepare_detectors(
         for detector in detectors:
             detector.accumulate(output)
 
-    loop = tqdm(detectors)
+    loop = tqdm(detectors, position=0, leave=True)
     loop.set_description("Fitting detectors...")
 
     for detector in loop:
