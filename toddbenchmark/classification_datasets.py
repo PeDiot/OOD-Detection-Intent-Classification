@@ -11,7 +11,6 @@ import pandas as pd
 # important to keep the full path
 # choose your own path 
 # used to load ATIS and BITEXT datasets
-DATASETS = "C:/Users/pemma/OneDrive - GENES/Ensae/S2/NLP/Project/OOD-Detection-Intent-Classification/datasets/"
 
 def prep_dataset(
     config_name,
@@ -20,7 +19,8 @@ def prep_dataset(
     train_max_size=-1,
     validation_max_size=-1,
     test_max_size=-1,
-    ood_label: Optional[int]=None
+    ood_label: Optional[int]=None, 
+    data_path: Optional[str]=None
 ) -> Tuple[Dataset, Dataset, Dataset]:
     sentence1_key, sentence2_key = config["keys"]
 
@@ -52,9 +52,9 @@ def prep_dataset(
     elif config_name == "b77":
         datasets = load_b77()
     elif config_name == "atis": 
-        datasets = load_atis()
+        datasets = load_atis(data_path)
     elif config_name == "bitext": 
-        datasets = load_bitext()
+        datasets = load_bitext(data_path)
     # =========================================
     elif config_name == "massive":
         datasets = load_massive()
@@ -408,16 +408,16 @@ def load_b77():
     
     return datasets
 
-def load_atis():
+def load_atis(data_path: str):
     """Description. ATIS Airline Travel Information System."""
-    dataset = pd.read_csv(f"{DATASETS}atis.csv")
+    dataset = pd.read_csv(f"{data_path}atis.csv")
     dataset = DatasetDict({"test": Dataset.from_pandas(dataset)})
 
     return dataset
 
-def load_bitext(): 
+def load_bitext(data_path: str): 
     """Description. Bitext - Customer Service Tagged Training Dataset for Intent Detection"""
-    dataset = pd.read_csv(f"{DATASETS}/bitext.csv")
+    dataset = pd.read_csv(f"{data_path}/bitext.csv")
     dataset = dataset\
         .rename(columns={"utterance": "text", "intent": "label"})\
         .loc[:, ["text", "label"]]
