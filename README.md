@@ -4,11 +4,10 @@ The methodology is inspired by [[1]](#1) and [[2]](#2) and the code is based on 
 
 ## TODO
 
-- Try multiple layers for `MahanlobisScorer`
-- Apply process on `CLINC150`
-    - Add method to identifiy IN and OUT samples from labels
-- Set cutoffs from scorer distributions
-- Plot distribution per layer for `CosineProjectionScorer`
+- Add DistilBERT results
+- Add title to PR/ROC curves
+- Compute AUROC/AUPR wrt different layer selection for Maha & Cosine 
+- Set cutoffs from scorer distributions (80% of train)
 
 ## References
 
