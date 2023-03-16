@@ -26,6 +26,8 @@ EN_CONFIGS = {
     "b77": {"label": 77, "metric": "mnli", "keys": ("text", None)},
     "atis": {"label": 22, "metric": "mnli", "keys": ("text", None)},
     "bitext": {"label": 27, "metric": "mnli", "keys": ("text", None)},
+    "clinc150_in": {"label": 5, "metric": "mnli", "keys": ("text", None)}, 
+    "clinc150_out": {"label": 146, "metric": "mnli", "keys": ("text", None)}, 
     # =================================================================
     "massive": {"label": 60, "metric": "mnli", "keys": ("text", None)},
     "trec_fine": {"label": 50, "metric": "mnli", "keys": ("text_scr", None)},
