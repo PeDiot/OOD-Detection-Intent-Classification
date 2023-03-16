@@ -8,6 +8,8 @@ The methodology is inspired by [[1]](#1) and [[2]](#2) and the code is based on 
 - Add title to PR/ROC curves
 - Compute AUROC/AUPR wrt different layer selection for Maha & Cosine 
 - Set cutoffs from scorer distributions (80% of train)
+- Add project description to README
+- Clean notebook
 
 ## References
 
