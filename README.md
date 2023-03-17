@@ -1,42 +1,54 @@
 # OOD Detection for Intent Classification 
 
-The methodology is inspired by [[1]](#1) and [[2]](#2) and the code is based on the [Todd](https://github.com/icannos/Todd) library and [ToddBenchmark](https://github.com/icannos/ToddBenchmark) framework implemented by [[3]](#3).
+## Purpose
 
-## TODO
+With the growing number of online banks or digitalized services of traditional banks, the need for human contact for customer support drops drastically. Deep learning and natural language processing methods allow today to answer efficiently and precisely to customers' questions (via chatbots for example) and to get closer to the way a human would answer. However, it is important that these methods do not give wrong information and do not answer questions they are not capable of answering. 
 
-- Add DistilBERT results
-- Add title to PR/ROC curves
-- Compute AUROC/AUPR wrt different layer selection for Maha & Cosine 
-- Set cutoffs from scorer distributions (80% of train)
-- Add project description to README
-- Clean notebook
+**The project aims to evaluate several out-of-distribution (OOD) detection methods to overcome these problems, and focus on task of intent classification in the banking domain.**
+
+The methodology is based on the [Todd](https://github.com/icannos/Todd) library and [ToddBenchmark](https://github.com/icannos/ToddBenchmark) framework. 
+
+## Getting started
+
+1. Install the required libraries using
+```
+pip install -r requirements.txt
+```
+
+2. Go to [`notebook`](notebook.ipynb)
+    - Check the performance of different OOD detectors by loading the results in [`backup`](backup) 
+    ```python 
+    records = {
+        model.name: {
+        dataset: load_records(model, dataset)
+        for dataset in (
+            "in_train", 
+            "out_test", 
+            "out_atis", 
+            "out_bitext", 
+            "out_clinc"
+        )
+        }
+        for model in (Model.BERT, Model.DistilBERT)
+    }
+    ```
+    - Fit your own detectors as shown in the `Detectors` section 
 
 ## References
 
-### Articles
-
-<a id="1">[1]</a> 
-Pierre Colombo, Eduardo D. C. Gomes, Guillaume Staerman, Nathan Noiry, and Pablo Piantanida. 2022. <em><span
-class="nocase">Beyond Mahalanobis-Based Scores for Textual OOD Detection.</span></em>
-
-<a id="2">[2]</a> 
-Wenxuan Zhou, Fangyu Liu, and Muhao Chen. 2021. <em><span
-class="nocase">Contrastive Out-of-Distribution Detection for Pretrained Transformers.</span></em>
-
 ### Code
 
-<a id="3">[3]</a> 
-Darrin, Maxime, Manuel Faysse, Guillaume Staerman, Marine Picot, Eduardo
-Dadalto Camara Gomez, and Pierre Colombo. 2023. <em><span
-class="nocase">Todd: A tool for text OOD detection.</span></em> (version
-0.0.1).
+- [`Todd`](https://github.com/icannos/Todd)
+- [`ToddBenchmark`](https://github.com/icannos/ToddBenchmark)
 
 ### Datasets
 
 - [banking77](https://huggingface.co/datasets/banking77)
 - [ATIS Airline Travel Information System](https://www.kaggle.com/datasets/hassanamin/atis-airlinetravelinformationsystem) 
 - [Bitext - Customer Service Tagged Training Dataset for Intent Detection](https://github.com/bitext/customer-support-intent-detection-training-dataset)
+- [clinc150 - An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction](https://github.com/clinc/oos-eval)
 
-### Model
+### Models
 
-- [philschmid/BERT-Banking77](https://huggingface.co/philschmid/BERT-Banking77) 
+- [`BERT-Banking77`](https://huggingface.co/philschmid/BERT-Banking77) 
+- [`DistilBERT-Banking77`](https://huggingface.co/philschmid/DistilBERT-Banking77)
