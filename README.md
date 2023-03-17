@@ -36,7 +36,7 @@ pip install -r requirements.txt
 
 ## Results
 
-The following plots depict the distribution of different OOD scoring methods. Both `MahalanobisScorer` `CosineProjection` have been computed using the `BERT`-based classifier. The plots related to the $s_C$ scoring function only depicts the \texttt{OUT-DS} datasets since $s_C(\mathrm{x}_i) \approx -1 \ \forall (\mathrm{x}_i, y_i) \in \mathcal{D}_N$. The `msp` and `energy` scorers are derived from the classifier's logits. 
+The following plots depict the distribution of different OOD scoring methods. Both `MahalanobisScorer` `CosineProjectionScorer` have been computed using the `BERT`-based classifier. The plots related to `CosineProjectionScorer` only show the `OUT-DS` datasets for display purpose. This scorer is too much close to -1 for `IN-DS` entries, preventing from having a clear view on the distribution of other instances. The `msp` and `energy` scorers are derived from the classifier's logits. 
 
 ![](imgs/distrib_bert_all_datasets.png)
 
