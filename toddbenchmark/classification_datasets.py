@@ -60,10 +60,8 @@ def prep_dataset(
         datasets = load_atis(data_path)
     elif config_name == "bitext": 
         datasets = load_bitext(data_path)
-    elif config_name == "clinc150_in": 
-        datasets = load_clinc150(data_path, in_labels=True)
-    elif config_name == "clinc150_out": 
-        datasets = load_clinc150(data_path, in_labels=False)
+    elif config_name == "clinc150": 
+        datasets = load_clinc150(data_path) 
     # =========================================
     elif config_name == "massive":
         datasets = load_massive()
@@ -434,15 +432,10 @@ def load_bitext(data_path: str):
 
     return dataset
 
-def load_clinc150(data_path: str, in_labels: bool): 
-    """Description. CLINC150 dataset."""
+def load_clinc150(data_path: str): 
+    """Description. CLINC150 banking-related dataset."""
 
-    if in_labels:
-        file_name = "clinc150_in"
-    else: 
-        file_name = "clinc150_out"
-
-    path = data_path + file_name 
+    path = data_path + "clinc150_bank" 
     ds = load_from_disk(path) 
     return ds
 
