@@ -10,90 +10,58 @@ from pandas.core.frame import DataFrame
 
 DATA_DIR = "./../datasets/"
 
-BANKING = {"pin_change": "change_pin"}
+with open(DATA_DIR + "CLINC150_domains.json") as f: 
+    domains = json.load(f) 
 
-CREDIT_CARDS = {
-    "replacement_card_duration": "card_delivery_estimate", 
-    "expiration_date": "card_about_to_expire", 
-    "report_lost_card": "lost_or_stolen_card", 
-    "card_declined": "declined_card_payment"
-}
+banking_intents = domains["banking"] + domains["credit_cards"]
 
-NEW_LABELS = list(BANKING.values()) + list(CREDIT_CARDS.values())
+def select_banking_entries(entries: List) -> DataFrame: 
+    """Description. Select banking-related entries."""
 
-with open(DATA_DIR+"/b77_label_mapping.json") as f: 
-    b77_LABELID = json.load(f)
-    b77_LABELID = {
-        label: id 
-        for label, id in zip(b77_LABELID["label"], b77_LABELID["id"]) 
-    }
-
-def update_label(label: str) -> str: 
-
-    if label in BANKING.keys(): 
-        label = BANKING[label]
-        
-    elif label in CREDIT_CARDS.keys(): 
-        label = CREDIT_CARDS[label]
-    
-    return label 
-
-def process_entries(entries: List, in_labels: bool) -> DataFrame: 
-    """Description. Update banking-related labels in CLINC150."""
-
-    data = {
-        text: update_label(label) 
+    banking_entries = {
+        text: label
         for text, label in entries
+        if label in banking_intents
     }
-    df = pd.DataFrame\
-        .from_dict(data, orient="index")\
+
+    banking_entries = pd.DataFrame\
+        .from_dict(banking_entries, orient="index")\
         .reset_index()\
         .rename(columns={"index": "text", 0: "label"})
     
-    if in_labels: 
-        df = df.loc[df.label.isin(NEW_LABELS), :]
-        df["label"] = df["label"].apply(lambda label: b77_LABELID[label])
-    else: 
-        df = df.loc[~df.label.isin(NEW_LABELS), :]
+    return banking_entries
 
-    df = df.reset_index(drop=True)
-    return df
-
-def df_list_to_dict(dfs: List) -> DatasetDict: 
+def df_list_to_ds(dfs: List) -> DatasetDict: 
     df = pd.concat(dfs).reset_index(drop=True)
     ds = DatasetDict({"test": Dataset.from_pandas(df)}) 
     
     return ds
 
-def preprocess_clinc150(ds: Dict) -> Tuple: 
+def preprocess_clinc150(ds: Dict) -> DatasetDict: 
     """Description. 
-    Split banking77-related entries accross train/dev/test datasets."""
+    Apply banking intents selection methods to train/dev/test sets in CLINC150."""
 
-    in_dfs, out_dfs = [], []
+    dfs = [
+        select_banking_entries(entries)
+        for ds, entries in ds.items()
+        if ds in ("train", "val", "test")
+    ] 
 
-    loop = tqdm(ds.items())
+    ds = df_list_to_ds(dfs) 
 
-    for key, entries in loop:
-        loop.set_description(f"Processing {key}...")
+    return ds
 
-        in_dfs.append(process_entries(entries, in_labels=True))
-        out_dfs.append(process_entries(entries, in_labels=False))
-
-    in_ds = df_list_to_dict(in_dfs)
-    out_ds = df_list_to_dict(out_dfs)
-
-    return in_ds, out_ds
 
 def save_dataset(ds: DatasetDict, file_name: str): 
-    ds.save_to_disk(f"{DATA_DIR}{file_name}")
+    file_path = f"{DATA_DIR}{file_name}"
+    ds.save_to_disk(file_path)
+    print(f"Dataset successfully saved at {file_path}")
 
 if __name__ == "__main__": 
 
-    with open(f"{DATA_DIR}CLINC150.json") as f: 
+    with open(DATA_DIR + "CLINC150.json") as f: 
         clinc150 = json.load(f)
 
-    in_ds, out_ds = preprocess_clinc150(clinc150)
-
-    save_dataset(in_ds, "clinc150_in")
-    save_dataset(out_ds, "clinc150_out")
-    
+    clinc150_bank = preprocess_clinc150(clinc150)
+    print(clinc150_bank)
+    save_dataset(clinc150_bank, "clinc150_bank")    
