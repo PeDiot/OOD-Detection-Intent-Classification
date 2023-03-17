@@ -16,7 +16,7 @@ pip install -r requirements.txt
 ```
 
 2. Go to [`notebook`](notebook.ipynb)
-    - Check the performance of different OOD detectors by loading the results in [`backup`](backup) 
+    - Check the performance of different OOD detectors by loading the results in [`backup`](backup) (see the [`Results`]((notebook.ipynb)) section)
     ```python 
     records = {
         model.name: {
@@ -32,7 +32,13 @@ pip install -r requirements.txt
         for model in (Model.BERT, Model.DistilBERT)
     }
     ```
-    - Fit your own detectors as shown in the `Detectors` section 
+    - Fit your own detectors as shown in the [`Detectors`]((notebook.ipynb)) section 
+
+## Results
+
+The following plots depict the distribution of different OOD scoring methods. Both `MahalanobisScorer` `CosineProjection` have been computed using the `BERT`-based classifier. The plots related to the $s_C$ scoring function only depicts the \texttt{OUT-DS} datasets since $s_C(\mathrm{x}_i) \approx -1 \ \forall (\mathrm{x}_i, y_i) \in \mathcal{D}_N$. The `msp` and `energy` scorers are derived from the classifier's logits. 
+
+![](imgs/distrib_bert_all_datasets.png)
 
 ## References
 
