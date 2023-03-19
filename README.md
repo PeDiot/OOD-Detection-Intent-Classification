@@ -1,5 +1,7 @@
 # Textual OOD Detection for Intent Classification in the Banking Industry
 
+Source code of the article [Textual OOD Detection for Intent Classification in the Banking Industry](https://openreview.net/forum?id=803CoFeh48k).
+
 ## Objective
 
 With the growing number of online banks or digitalized services of traditional banks, the need for human contact for customer support drops drastically. Deep learning and natural language processing methods allow today to answer efficiently and precisely to customers' questions (via chatbots for example) and to get closer to the way a human would answer. However, it is important that these methods do not give wrong information and do not answer questions they are not capable of answering. 
