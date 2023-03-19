@@ -1,10 +1,10 @@
-# OOD Detection for Intent Classification 
+# Textual OOD Detection for Intent Classification in the Banking Industry
 
 ## Objective
 
 With the growing number of online banks or digitalized services of traditional banks, the need for human contact for customer support drops drastically. Deep learning and natural language processing methods allow today to answer efficiently and precisely to customers' questions (via chatbots for example) and to get closer to the way a human would answer. However, it is important that these methods do not give wrong information and do not answer questions they are not capable of answering. 
 
-**The project aims to evaluate several out-of-distribution (OOD) detection methods to overcome these problems, and focus on task of intent classification in the banking domain.**
+**The project aims to evaluate several out-of-distribution (OOD) detection methods to overcome these problems, and focus on task of intent classification in the banking domain.** OOD detection refers to the ability of a model to identify input data that falls outside of the distribution of data it was trained on, and flag it as potentially unsafe or unreliable. Developing effective OOD detection techniques is critical for ensuring the safety and trustworthiness of large language models. 
 
 The methodology is based on the [Todd](https://github.com/icannos/Todd) library and [ToddBenchmark](https://github.com/icannos/ToddBenchmark) framework. 
 
